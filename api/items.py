@@ -1,3 +1,4 @@
+import os
 import json
 
 from pymongo import MongoClient
@@ -5,7 +6,7 @@ from pymongo import MongoClient
 from http.server import BaseHTTPRequestHandler
 
 def connect_to_db():
-    client = MongoClient(f'mongodb+srv://telescoped:{password}>@cluster0-oe3qq.mongodb.net/{dbname}?retryWrites=true&w=majority')
+    client = MongoClient(os.environ.get('MONGODB_URL'))
 
 class handler(BaseHTTPRequestHandler):
 
