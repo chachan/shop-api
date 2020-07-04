@@ -14,6 +14,6 @@ class handler(BaseHTTPRequestHandler):
         self.send_response(200)
         self.send_header('Content-type','application/json')
         self.end_headers()
-        message = {'message': 'OK'}
+        message = json.dumps({'message': 'OK'})
         self.wfile.write(message.encode(message))
         return
