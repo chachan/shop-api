@@ -1,19 +1,37 @@
-import os
-import json
+""" Functions for items management """
+import logging
+from logging import Logger
 
-from pymongo import MongoClient
+from flask import Flask, jsonify, request
 
-from http.server import BaseHTTPRequestHandler
+from .core import items as core_items
+from .utils.logger import config_logger
 
-def connect_to_db():
-    client = MongoClient(os.environ.get('MONGODB_URL'))
+app = Flask(__name__)
 
-class handler(BaseHTTPRequestHandler):
+LOGGER: Logger = config_logger(name='api.items', level=logging.DEBUG)
 
-    def do_GET(self):
-        self.send_response(200)
-        self.send_header('Content-type','application/json')
-        self.end_headers()
-        message = json.dumps({'message': 'OK'})
-        self.wfile.write(message.encode(message))
-        return
+@app.route('/api/items', methods=['GET'])
+def items_list() -> str:
+    """ Get a list of items for sale """
+    items = core_items.items_list()
+    return jsonify(items)
+
+@app.route('/api/items', methods=['POST'])
+def items_add() -> str:
+    """ List a new item up for sale """
+    # TODO: implement validation
+    items: list = request.get_json().get('items')
+    result = core_items.items_add(items)
+    if result.acknowledged:
+        return jsonify({'message': 'sucess'})
+    return jsonify({'message': 'error. Contact support'})
+
+@app.route('/api/items', methods=['DELETE'])
+def items_remove() -> str:
+    """ Unlist an item for sale """
+    item = request.get_json().get('item')
+    result = core_items.items_remove(item.get('name'))
+    if result.acknowledged:
+        return jsonify({'message': 'sucess'})
+    return jsonify({'message': 'error. Contact support'})
