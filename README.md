@@ -47,5 +47,32 @@ curl -X DELETE 'https://shop-api.chachan.vercel.app/api/items' \
 ```
 
 ### Add an item to a shopping cart
+
+```bash
+curl -X POST 'https://shop-api.chachan.vercel.app/api/cart' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "item": {
+        "name": "Flour",
+        "price": 12.3
+    }
+}'
+```
+
 ### Remove an item from a shopping cart
+
+```bash
+curl --location --request DELETE 'https://shop-api.chachan.vercel.app/api/cart' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "item": {
+        "name": "Flour"
+    }
+}'
+```
+
 ### View a user's shopping cart
+
+```bash
+curl -X GET 'https://shop-api.chachan.vercel.app/api/cart'
+```
