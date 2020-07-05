@@ -14,7 +14,14 @@ LOGGER: Logger = config_logger(name='api.items', level=logging.DEBUG)
 @app.route('/api/items', methods=['GET'])
 def items_list() -> str:
     """ Get a list of items for sale """
-    items = core_items.items_list()
+    result = core_items.items_list()
+    items = []
+    for each in result:
+        item = {
+            'name': each['name'],
+            'price': each['price']
+        }
+        items.append(item)
     return jsonify(items)
 
 @app.route('/api/items', methods=['POST'])
