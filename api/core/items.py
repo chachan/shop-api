@@ -12,6 +12,7 @@ LOGGER: Logger = config_logger(name='core.items', level=logging.DEBUG)
 
 def items_list() -> Cursor:
     """ Get a list of items for sale """
+    LOGGER.debug('getting list of items')
     db = connect_to_db() # pylint: disable=invalid-name
     try:
         result = db.items.find({})
@@ -23,6 +24,7 @@ def items_list() -> Cursor:
 
 def items_add(items: list) -> InsertManyResult:
     """ List a new item up for sale """
+    LOGGER.debug('adding items to list of items: {}'.format([each['name'] for each in items]))
     db = connect_to_db() # pylint: disable=invalid-name
     try:
         # TODO: implement validation
@@ -35,6 +37,7 @@ def items_add(items: list) -> InsertManyResult:
 
 def items_remove(item_name: str) -> DeleteResult:
     """ Unlist an item for sale """
+    LOGGER.debug('removing item from list of items: {}'.format(item_name))
     db = connect_to_db() # pylint: disable=invalid-name
     try:
         result = db.items.delete_one({'name': item_name})
